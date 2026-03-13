@@ -1,0 +1,661 @@
+/* ============================================================
+   SPACEMAN FORTE â€” Spec Sheet Stylesheet
+   Mirrors the visual style of the 6210-C / 6695-CL PDF spec sheets
+   Apply to a rendered Markdown page (e.g. via Marked.js or Pandoc HTML)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   GOOGLE FONTS IMPORT
+   Source Sans 3 closely matches the PDF's clean sans-serif body.
+   Oswald is used for the large model-number display heading.
+   ------------------------------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Oswald:wght@500;700&display=swap');
+
+/* ------------------------------------------------------------
+   CSS CUSTOM PROPERTIES (Brand Tokens)
+   ------------------------------------------------------------ */
+:root {
+  /* Brand colors */
+  --color-orange:        #3151c4;   /* Spaceman orange â€” headings, accents, rules */
+  --color-orange-light:  #adc2f1;   /* Tinted orange â€” callout background */
+  --color-charcoal:      #2B2B2B;   /* Primary body text */
+  --color-mid-gray:      #555555;   /* Secondary text, feature descriptions */
+  --color-light-gray:    #F4F4F4;   /* Alternating table row, section bg */
+  --color-rule:          #DDDDDD;   /* Horizontal rules, table borders */
+  --color-white:         #FFFFFF;
+  --color-footer-text:   #888888;
+
+  /* Typography */
+  --font-body:     'Source Sans 3', 'Helvetica Neue', Arial, sans-serif;
+  --font-display:  'Oswald', 'Arial Narrow', sans-serif;
+
+  --size-base:      15px;
+  --size-sm:        13px;
+  --size-xs:        11.5px;
+  --size-lg:        17px;
+  --size-xl:        22px;
+  --size-h2:        13px;    /* Section heading â€” small caps style */
+  --size-model:     52px;    /* Large model number */
+  --size-category:  12px;    /* "Soft Serve Machine" label above model */
+
+  /* Spacing */
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   16px;
+  --space-lg:   28px;
+  --space-xl:   40px;
+
+  /* Layout */
+  --page-width:     820px;
+  --page-padding:   48px;
+}
+
+/* ------------------------------------------------------------
+   RESET & BASE
+   ------------------------------------------------------------ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--size-base);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-charcoal);
+  background: var(--color-white);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------
+   PAGE WRAPPER
+   Centres content and sets max width matching PDF proportions
+   ------------------------------------------------------------ */
+.page,
+article,
+main,
+.markdown-body {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--page-padding);
+}
+
+/* ------------------------------------------------------------
+   HEADER AREA
+   Mirrors the PDF's top-left product identity block:
+     /// Soft Serve Machine   â† small orange label with slashes
+     6210-C                   â† large display heading
+     110V â€“ Gravity Feed      â† subtitle line
+   ------------------------------------------------------------ */
+
+/* The very first H1 becomes the large model-number display */
+h1:first-of-type {
+  font-family: var(--font-display);
+  font-size: var(--size-model);
+  font-weight: 700;
+  color: var(--color-charcoal);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+/* Pseudo-element injects the "/// [Category]" label above H1 */
+h1:first-of-type::before {
+  content: attr(data-category);   /* set data-category="Soft Serve Machine" on <h1> in HTML */
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--size-category);
+  font-weight: 700;
+  color: var(--color-orange);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
+}
+
+/* Fallback: if data-category isn't set, show generic prefix */
+h1:first-of-type:not([data-category])::before {
+  content: '/// Spaceman';
+}
+
+/* Subtitle line immediately after H1 â€” rendered as <p><strong>â€¦</strong></p>
+   or as the first <p> after the heading block */
+h1:first-of-type + p,
+h1:first-of-type + p strong {
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--color-mid-gray);
+  letter-spacing: 0.03em;
+}
+
+/* ------------------------------------------------------------
+   HEADER IMAGE BANNER
+   Place a <div class="header-image"> immediately after the H1
+   block in your HTML to get the full-width product hero image.
+   Usage:
+     <div class="header-image">
+       <img src="machine-photo.jpg" alt="Spaceman 6210-C">
+     </div>
+   ------------------------------------------------------------ */
+.header-image {
+  width: 50%;
+  max-height: 400px;
+  overflow: hidden;
+  margin: var(--space-lg) 0;
+  border-radius: 2px;
+}
+
+.header-image img {
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  display: block;
+}
+
+/* ------------------------------------------------------------
+   FEATURE BULLET LIST  (â˜† icon items below the model number)
+   In Markdown these render as a plain <ul>; style them to match
+   the PDF's icon-prefixed feature highlights.
+   ------------------------------------------------------------ */
+h1:first-of-type ~ ul:first-of-type,   /* first ul after h1 */
+.feature-highlights {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-md) 0 var(--space-lg);
+}
+
+h1:first-of-type ~ ul:first-of-type li,
+.feature-highlights li {
+  font-size: var(--size-base);
+  font-weight: 400;
+  color: var(--color-charcoal);
+  padding: var(--space-xs) 0 var(--space-xs) 26px;
+  position: relative;
+}
+
+h1:first-of-type ~ ul:first-of-type li::before,
+.feature-highlights li::before {
+  content: 'âœ¦';
+  position: absolute;
+  left: 0;
+  color: var(--color-orange);
+  font-size: 11px;
+  top: 6px;
+}
+
+/* ------------------------------------------------------------
+   CALLOUT / HIGHLIGHT BLOCK  (â˜… orange star paragraph in PDF)
+   In Markdown wrap text in a blockquote to get this treatment.
+   ------------------------------------------------------------ */
+blockquote {
+  background: var(--color-orange-light);
+  border-left: 4px solid var(--color-orange);
+  border-radius: 2px;
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+
+blockquote p {
+  font-size: var(--size-base);
+  font-weight: 600;
+  color: var(--color-charcoal);
+  line-height: 1.5;
+}
+
+blockquote p::before {
+  content: 'â˜…  ';
+  color: var(--color-orange);
+}
+
+/* ------------------------------------------------------------
+   HORIZONTAL RULE  â€” thin orange accent rule between sections
+   ------------------------------------------------------------ */
+hr {
+  border: none;
+  border-top: 2px solid var(--color-orange);
+  margin: var(--space-xl) 0 var(--space-lg);
+  opacity: 0.25;
+}
+
+/* ------------------------------------------------------------
+   SECTION HEADINGS
+   H2 = orange all-caps category label  (e.g. "Key Features")
+   H3 = bold dark sub-section title     (e.g. "Quality â€” Superior Craftsmanship")
+   H4 = small bold feature label        (e.g. "Fast Freeze Down")
+   ------------------------------------------------------------ */
+h2 {
+  font-family: var(--font-body);
+  font-size: var(--size-h2);
+  font-weight: 700;
+  color: var(--color-orange);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1.5px solid var(--color-orange);
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: var(--size-lg);
+  font-weight: 700;
+  color: var(--color-charcoal);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+h4 {
+  font-family: var(--font-body);
+  font-size: var(--size-base);
+  font-weight: 700;
+  color: var(--color-charcoal);
+  margin-top: var(--space-md);
+  margin-bottom: 2px;
+}
+
+/* ------------------------------------------------------------
+   BODY PARAGRAPHS
+   ------------------------------------------------------------ */
+p {
+  font-size: var(--size-base);
+  color: var(--color-mid-gray);
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+  line-height: 1.6;
+}
+
+/* Feature description paragraphs that follow an H4 */
+h4 + p {
+  margin-top: 2px;
+  margin-bottom: var(--space-lg);
+  color: var(--color-mid-gray);
+}
+
+strong {
+  font-weight: 700;
+  color: var(--color-charcoal);
+}
+
+em {
+  font-style: italic;
+  color: var(--color-mid-gray);
+}
+
+/* ------------------------------------------------------------
+   GENERAL LISTS  (bullet lists in "Spaceman Difference" section)
+   ------------------------------------------------------------ */
+ul, ol {
+  padding-left: 20px;
+  margin-bottom: var(--space-md);
+}
+
+li {
+  font-size: var(--size-base);
+  color: var(--color-mid-gray);
+  margin-bottom: var(--space-xs);
+  line-height: 1.5;
+}
+
+ul li::marker {
+  color: var(--color-orange);
+}
+
+/* ------------------------------------------------------------
+   TABLES
+   Mirrors the PDF's clean specification tables:
+   â€¢ No outer border
+   â€¢ Column headers: white text on dark charcoal background
+   â€¢ Alternating rows: white / light gray
+   â€¢ Left-aligned label column, right-aligned value column
+   â€¢ Compact row height matching PDF density
+   ------------------------------------------------------------ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-md) 0 var(--space-xl);
+  font-size: var(--size-sm);
+}
+
+/* Header row */
+thead tr {
+  background-color: var(--color-charcoal);
+}
+
+thead th {
+  font-family: var(--font-body);
+  font-size: var(--size-xs);
+  font-weight: 700;
+  color: var(--color-white);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 9px 12px;
+  border: none;
+}
+
+/* Right-align last header column (value/data side) */
+thead th:last-child {
+  text-align: right;
+}
+
+/* Body rows */
+tbody tr:nth-child(odd) {
+  background-color: var(--color-white);
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--color-light-gray);
+}
+
+tbody tr:hover {
+  background-color: #EEF4FB;
+  transition: background-color 0.12s ease;
+}
+
+tbody td {
+  font-size: var(--size-sm);
+  color: var(--color-charcoal);
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid var(--color-rule);
+  vertical-align: middle;
+}
+
+/* Left column = label (bold) */
+tbody td:first-child {
+  font-weight: 600;
+  color: var(--color-charcoal);
+  width: 55%;
+}
+
+/* Right column = value */
+tbody td:last-child {
+  text-align: right;
+  color: var(--color-mid-gray);
+}
+
+/* Multi-column tables (Dimensions, Electrical) â€” equal columns */
+table.multi-col td:first-child {
+  width: auto;
+}
+table.multi-col td {
+  text-align: center;
+}
+table.multi-col td:first-child {
+  text-align: left;
+}
+
+/* Checkmark cells â€” centre the âœ“ symbol */
+tbody td:only-child,
+tbody td[data-check] {
+  text-align: center;
+}
+
+/* Section sub-heading rows (bold label spanning full row) */
+tr.section-label td {
+  font-weight: 700;
+  color: var(--color-charcoal);
+  background: var(--color-light-gray);
+  font-size: var(--size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 6px 12px;
+  border-top: 2px solid var(--color-rule);
+}
+
+/* ------------------------------------------------------------
+   "THE SPACEMAN DIFFERENCE" â€” Three-column value cards
+   Wrap each group (Quality / Value / Service) in a <div class="difference-grid">
+   ------------------------------------------------------------ */
+.difference-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  margin: var(--space-lg) 0 var(--space-xl);
+}
+
+.difference-card {
+  border: 1px solid var(--color-rule);
+  border-radius: 3px;
+  padding: var(--space-md) var(--space-md) var(--space-lg);
+}
+
+.difference-card .card-label {
+  font-size: var(--size-xs);
+  font-weight: 700;
+  color: var(--color-orange);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.difference-card .card-title {
+  font-size: var(--size-lg);
+  font-weight: 700;
+  color: var(--color-charcoal);
+  margin-bottom: var(--space-sm);
+  line-height: 1.2;
+}
+
+.difference-card .card-subtitle {
+  font-size: var(--size-sm);
+  font-weight: 700;
+  color: var(--color-charcoal);
+  margin-bottom: var(--space-xs);
+}
+
+.difference-card ul {
+  padding-left: 16px;
+  margin: 0;
+}
+
+.difference-card li {
+  font-size: var(--size-sm);
+  color: var(--color-mid-gray);
+  margin-bottom: 2px;
+}
+
+.difference-card li::marker {
+  color: var(--color-orange);
+  content: 'âœ“  ';
+}
+
+/* ------------------------------------------------------------
+   PAGE FOOTER
+   Mirrors the PDF footer: thin rule + contact details in gray
+   Usage: <footer> tag at the bottom of the page
+   ------------------------------------------------------------ */
+footer,
+.page-footer {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+footer p,
+.page-footer p {
+  font-size: var(--size-xs);
+  color: var(--color-footer-text);
+  margin: 0;
+  line-height: 1.4;
+}
+
+footer a,
+.page-footer a {
+  color: var(--color-footer-text);
+  text-decoration: none;
+}
+
+footer a:hover,
+.page-footer a:hover {
+  color: var(--color-orange);
+}
+
+/* Spaceman logo placeholder in footer */
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-charcoal);
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+}
+
+.footer-logo span {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-mid-gray);
+  display: block;
+  margin-top: -2px;
+}
+
+/* Fallback footer for plain Markdown renders (last <p> in document) */
+body > *:last-child p:last-child,
+.markdown-body > p:last-child {
+  font-size: var(--size-xs);
+  color: var(--color-footer-text);
+  border-top: 1px solid var(--color-rule);
+  padding-top: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+/* ------------------------------------------------------------
+   NSF / UL CERTIFICATION BADGES
+   Add <div class="cert-badges"> near the header if needed
+   ------------------------------------------------------------ */
+.cert-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0;
+}
+
+.cert-badge {
+  border: 2px solid var(--color-rule);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--size-xs);
+  font-weight: 700;
+  color: var(--color-charcoal);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ------------------------------------------------------------
+   UTILITY CLASSES
+   ------------------------------------------------------------ */
+
+/* Orange accent text */
+.text-orange  { color: var(--color-orange); }
+
+/* Small all-caps label */
+.label-caps {
+  font-size: var(--size-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-orange);
+}
+
+/* Two-column feature grid (used in "Key Features" section) */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 var(--space-xl);
+  margin: var(--space-md) 0;
+}
+
+/* Star callout inline (for use within flowing text) */
+.star-callout {
+  color: var(--color-orange);
+  font-weight: 700;
+}
+
+/* Available options check column */
+.check {
+  color: var(--color-orange);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------
+   PRINT STYLES
+   Keeps the spec sheet print-faithful when sent to a printer
+   ------------------------------------------------------------ */
+@media print {
+  body {
+    font-size: 11pt;
+  }
+
+  .page,
+  article,
+  main,
+  .markdown-body {
+    max-width: 100%;
+    padding: 20mm 18mm;
+  }
+
+  h1:first-of-type {
+    font-size: 36pt;
+  }
+
+  table {
+    page-break-inside: avoid;
+  }
+
+  footer,
+  .page-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8pt 18mm;
+    background: white;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE â€” smaller screens
+   ------------------------------------------------------------ */
+@media (max-width: 640px) {
+  :root {
+    --size-model:   38px;
+    --page-padding: 24px;
+  }
+
+  .difference-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  footer,
+  .page-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+}
