@@ -123,9 +123,21 @@ h1:first-of-type::before {
   margin-bottom: var(--space-xs);
 }
 
+/* Logo prefix for fallback heading (when no data-category is set) */
+.logo-prefix {
+  margin-bottom: var(--space-xs);
+}
+
+.fallback-logo {
+  height: 72px;
+  width: auto;
+  display: block;
+  margin-bottom: 4px;
+}
+
 /* Fallback: if data-category isn't set, show generic prefix */
 h1:first-of-type:not([data-category])::before {
-  content: '/// Spaceman';
+  content: '';
 }
 
 /* Subtitle line immediately after H1 â€” rendered as <p><strong>â€¦</strong></p>
@@ -148,16 +160,16 @@ h1:first-of-type + p strong {
      </div>
    ------------------------------------------------------------ */
 .header-image {
-  width: 50%;
-  max-height: 400px;
+  width: 100%;
+  max-height: 800px;
   overflow: hidden;
   margin: var(--space-lg) 0;
   border-radius: 2px;
 }
 
 .header-image img {
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: 50% 50%;
   display: block;
@@ -171,7 +183,7 @@ h1:first-of-type + p strong {
 h1:first-of-type ~ ul:first-of-type,   /* first ul after h1 */
 .feature-highlights {
   list-style: none;
-  padding: 0;
+  padding-left: 20px;
   margin: var(--space-md) 0 var(--space-lg);
 }
 
@@ -180,8 +192,7 @@ h1:first-of-type ~ ul:first-of-type li,
   font-size: var(--size-base);
   font-weight: 400;
   color: var(--color-charcoal);
-  padding: var(--space-xs) 0 var(--space-xs) 26px;
-  position: relative;
+  margin-bottom: var(--space-xs);
 }
 
 h1:first-of-type ~ ul:first-of-type li::before,
@@ -416,7 +427,7 @@ tr.section-label td {
 }
 
 /* ------------------------------------------------------------
-   "THE SPACEMAN DIFFERENCE" â€” Three-column value cards
+   "THE SPACEMAN DIFFERENCE" â€" Three-column value cards
    Wrap each group (Quality / Value / Service) in a <div class="difference-grid">
    ------------------------------------------------------------ */
 .difference-grid {
@@ -457,19 +468,15 @@ tr.section-label td {
 }
 
 .difference-card ul {
-  padding-left: 16px;
+  padding-left: 20px;
   margin: 0;
+  list-style: disc;
 }
 
 .difference-card li {
   font-size: var(--size-sm);
   color: var(--color-mid-gray);
   margin-bottom: 2px;
-}
-
-.difference-card li::marker {
-  color: var(--color-orange);
-  content: 'âœ“  ';
 }
 
 /* ------------------------------------------------------------
@@ -587,6 +594,7 @@ body > *:last-child p:last-child,
   margin: var(--space-md) 0;
 }
 
+
 /* Star callout inline (for use within flowing text) */
 .star-callout {
   color: var(--color-orange);
@@ -667,22 +675,12 @@ body > *:last-child p:last-child,
 }</style>
 </head>
 <body class="markdown-body">
+<div class="logo-prefix"><img src="static/Spaceman_logo.png.webp" alt="Spaceman" class="fallback-logo"></div>
 <h1>Frozen Drink Machine — 6695-CL</h1>
-<p><strong>220V – Gravity Feed</strong>
-<strong>Refrigerated Hopper Pre-Chills Mix</strong></p>
 <div class="header-image">
-  <img src="static/6695-CL_Image_R.png" alt="6695-CL">
+  <img src="static/Hero_6695-CL.png" alt="6695-CL">
 </div>
 
-<ul>
-<li>Two Flavor // Countertop</li>
-<li>Up to 320, 10oz drinks per hour</li>
-<li>(2) 7.3 Qt Cylinder – (2) 12.7 Qt Hopper</li>
-</ul>
-<blockquote>
-<p><strong>Higher capacity solution with greater flexibility to serve larger crowds alcoholic &amp; non-alcoholic frozen drinks including milkshakes.</strong></p>
-</blockquote>
-<hr>
 <h2>Key Features</h2>
 <p><strong>Fast Freeze Down</strong>
 <strong>Patented 100% Controlled Contact Flooded Evaporator</strong> – Designed for maximum efficiency, this innovation delivers the industry&#39;s fastest freeze-down and recovery times. The result? Smaller ice crystals and the smoothest, creamiest mouthfeel.</p>
@@ -700,6 +698,8 @@ Proprietary technology prevents machine freeze-ups by automatically switching to
 Independently controls and cools each hopper to maintain ideal temperatures, prevent freezing around the sides, and optimize output by pre-chilling product before it enters the freezing cylinder.</p>
 <hr>
 <h2>The Spaceman Difference</h2>
+<div class="difference-card">
+
 <h3>Quality — Superior Craftsmanship</h3>
 <p><em>Designed by Aerospace Engineers</em></p>
 <ul>
@@ -721,6 +721,8 @@ Independently controls and cools each hopper to maintain ideal temperatures, pre
 <li>No binding contracts</li>
 <li>No locked-in maintenance fees</li>
 </ul>
+</div>
+
 <hr>
 <p><img src="static/6695-CL_Diagram.png" alt="6695-CL"></p>
 <h2>Specifications</h2>

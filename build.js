@@ -12,6 +12,16 @@ const css = fs.readFileSync('Style.css', 'utf8');
 
 files.forEach(file => {
   const md = fs.readFileSync(file, 'utf8');
+  let htmlContent = marked(md);
+  
+  // Insert logo image before the first h1 if no data-category attribute exists
+  if (!htmlContent.includes('data-category')) {
+    htmlContent = htmlContent.replace(
+      '<h1>',
+      '<div class="logo-prefix"><img src="static/Spaceman_logo.png.webp" alt="Spaceman" class="fallback-logo"></div>\n<h1>'
+    );
+  }
+  
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +31,7 @@ files.forEach(file => {
   <style>${css}</style>
 </head>
 <body class="markdown-body">
-${marked(md)}
+${htmlContent}
 </body>
 </html>`;
 
